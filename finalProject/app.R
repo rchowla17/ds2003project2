@@ -1,50 +1,42 @@
----
-title: "project2"
-author: "Rohan Chowla"
-date: "`r Sys.Date()`"
-output: html_document
-runtime: shiny
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-
-```{r, echo=FALSE}
-# Load the required library
 library(shiny)
+library(bslib)
 
 # Define UI for application
-ui <- fluidPage(
-  
-  # Application title
-  titlePanel("Final Project"),
-  
-  # Sidebar layout with input and output definitions
-  sidebarLayout(
-    
-    # Sidebar panel for inputs
-    sidebarPanel(
-      
+ui <- page_navbar(
+  title = "Final Project",
+  underline=T,
       # Tab selection
-      tabsetPanel(
+
         tabPanel("Introduction",
-                 value = "intro",
-                 fluidPage(h3("Introduction to Dataset"))
-                 ),
-        tabPanel("Question 1", value = "q1"),
-        tabPanel("Question 2", value = "q2"),
-        tabPanel("Question 3", value = "q3")
-      )
-    ),
-    
+           value = "intro",
+           fluidPage(h3("Introduction to Dataset")),
+           mainPanel(
+             # Output
+             uiOutput("output")
+           )
+        ),
+        tabPanel("Question 1", value = "q1",
+          fluidPage(h3("Question 1")),
+          mainPanel(
+            # Output
+            uiOutput("output")
+          )
+        ),
+        tabPanel("Question 2", value = "q2",
+         fluidPage(h3("Question 2")),
+         mainPanel(
+           # Output
+           uiOutput("output")
+         )
+        ),
+        tabPanel("Question 3", value = "q3",
+         fluidPage(h3("Question 3")),
+         mainPanel(
+           # Output
+           uiOutput("output")
+         )
+        )
     # Main panel for displaying outputs
-    mainPanel(
-      # Output
-      uiOutput("output")
-    )
-  )
 )
 
 # Define server logic
@@ -58,8 +50,8 @@ server <- function(input, output) {
     } else if (selected_tab == "intro") {
       # Render output for Intro
       fluidRow(
-               h3("Introduction to dataset"),
-               # Add your output elements for Question 1 here
+        h3("Introduction to dataset"),
+        # Add your output elements for Question 1 here
       )
     } else if (selected_tab == "q1") {
       # Render output for Question 1
@@ -91,4 +83,3 @@ server <- function(input, output) {
 
 # Run the application
 shinyApp(ui = ui, server = server)
-```
