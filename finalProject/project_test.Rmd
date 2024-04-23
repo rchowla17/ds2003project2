@@ -1,0 +1,66 @@
+---
+title: "emily's question"
+author: "Emily Fredenburgh"
+date: "2024-04-22"
+output: html_document
+runtime: shiny
+---
+
+```{r}
+library(shiny)
+library(dplyr)
+library(plotly)
+library(ggplot2)
+
+# reading in the data
+df <- read.csv('cancer patient data sets.csv')
+
+# filtering the data to only have high level lung cancer patients
+high <- subset(df, Level == "High")
+
+# i want to focus on dry cough, clubbed finger nails, and age
+high_subset <- subset(high, select = c("Clubbing.of.Finger.Nails", "Age", "Dry.Cough"))
+
+# i want the slider bar to only have the minimum and maximum ages, so i'm finding that
+minimum_age <- min(high_subset$Age)
+maximum_age <- max(high_subset$Age)
+
+# plugged in basic shiny code template
+# Define UI
+ui <- fluidPage(
+  titlePanel("Analysis of High Level Lung Cancer Symptoms"),
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("age_range", "Choose Age Range:",
+                  min = minimum_age, max = maximum_age, value = c(minimum_age, maximum_age), step = 1)
+    ),
+    mainPanel(
+      plotlyOutput("plot")
+    )
+  )
+)
+
+# Define server logic
+server <- function(input, output) {
+  
+  output$plot <- renderPlotly({
+    # making the data filtered based on the age range in the df using indexing
+    filtered <- high_subset %>%
+      filter(Age >= input$age_range[1], Age <= input$age_range[2])
+    
+    p <- ggplot(filtered, aes(x = Age, y = Dry.Cough, color = Clubbing.of.Finger.Nails, text = paste("Age: ", Age, "<br>Dry Cough: ", Dry.Cough, "<br>Clubbing of Finger Nails: ", Clubbing.of.Finger.Nails))) +
+      geom_point() +
+      labs(title = "Dry Cough vs Age with Clubbing of Finger Nails",
+           x = "Age", y = "Dry Cough", color = "Clubbing of Finger Nails") +
+      theme_minimal()
+    
+    ggplotly(p, tooltip = "text")
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+```
+
+
+
