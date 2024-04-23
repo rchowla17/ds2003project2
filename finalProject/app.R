@@ -22,15 +22,31 @@ ui <- page_navbar(
   title = "Final Project",
   theme= bs_theme(
     bootswatch = "lux"
+    
   ),
   underline=T,
       # Tab selection
 
         tabPanel("Introduction",
            value = "intro",
-           fluidPage(h3("Introduction to Dataset")),
-           mainPanel()
-        ),
+           fluidPage(h3("Introduction to Dataset and Analysis")),
+           p("This is a comprehensive data set comprised of lung cancer patients and their associated risk factors."),
+           a("Kaggle data set link",
+              href = "https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link",
+              target = "_blank",
+              tags$head(tags$style(HTML("
+               a { color: #007bff; } /* blue */
+               a:hover { color: #ffa700; } /* orange */
+             ")))
+            ),
+            tags$hr(),
+            p("Each entry in the data set is classified by a unique 'Patient ID' which is followed by demographic information like 'Gender' and 'Age'. The rest of the data set is comprised of variables known as risk factors, which are associated with an increased liklihood of developing lung cancer."),
+             selectInput("variable_selector", "Select a Risk Factor:",
+                         choices = c( "Smoking", "Obesity", "Air Pollution", "Alcohol Use", "OccuPational Hazards", "Genetic Risk", "Passive Smoker", "Clubbing of Finger Nails", "Wheezing", "Balanced Diet" )),
+             verbatimTextOutput("variable_details")
+           ),
+         
+        
         tabPanel("Question 1", value = "q1",
          fluidPage(
            titlePanel("Risk Factors and Lung Cancer Visualization"),
@@ -87,7 +103,36 @@ server <- function(input, output) {
       ggplotly(gg)
     }
   })
-  
+  output$variable_details <- renderText({
+    req(input$variable_selector)  # Ensure a variable is selected
+    if (input$variable_selector == "Smoking") {
+      return("Smoking: The level of smoking of the patient. (Categorical, Mean ± S): 3.99 ± 2.64)")
+    } else if (input$variable_selector == "Obesity") {
+      return("Obesity: The level of obesity of the patient. (Categorical, Mean ± S): 4.47 ± 2.16)")
+    }
+    else if (input$variable_selector == "OccuPational Hazards") {
+      return("Occupational Hazards: The patient's exposure to occupational hazards. (Categorical, Mean ± SD: 4.15 ± 2.44)")
+    }
+     else if (input$variable_selector == "Air Pollution") {
+      return("Air Pollution: The level of air pollution exposure of the patient. (Categorical, Mean ± S):  3.84 ± 2.30)")
+    }else if (input$variable_selector == "Air Pollution") {
+      return("Air Pollution: The level of air pollution exposure of the patient. (Categorical, Mean ± SD: 3.84 ± 2.30)")
+    } else if (input$variable_selector == "Alcohol Use") {
+      return("Alcohol Use: The level of alcohol consumption of the patient. (Categorical, Mean ± SD: 3.76 ± 2.60)")
+    } else if (input$variable_selector == "Occupational Hazards") {
+      return("Occupational Hazards: The patient's exposure to occupational hazards. (Categorical, Mean ± SD: 4.15 ± 2.44)")
+    } else if (input$variable_selector == "Genetic Risk") {
+      return("Genetic Risk: The genetic risk factors of the patient for lung cancer. (Categorical, Mean ± SD: 4.51 ± 2.38)")
+    } else if (input$variable_selector == "Passive Smoker") {
+      return("Passive Smoker: Exposure to second-hand smoke. (Categorical, Mean ± SD: 3.59 ± 2.28)")
+    } else if (input$variable_selector == "Clubbing of Finger Nails") {
+      return("Clubbing of Finger Nails: Presence of clubbing in fingernails, a potential symptom of lung cancer. (Categorical, Mean ± SD: 3.92 ± 2.35)")
+    } else if (input$variable_selector == "Wheezing") {
+      return("Wheezing: Frequency of wheezing as a symptom in the patient. (Categorical, Mean ± SD: 3.84 ± 2.51)")
+    } else if (input$variable_selector == "Balanced Diet") {
+      return("Balanced Diet: Adherence to a balanced diet by the patient. (Categorical, Mean ± SD: 4.09 ± 2.43)")
+    }
+  })
   
   # Render output for Question 2
   output$plot2 <- renderPlotly({
