@@ -1,5 +1,8 @@
 library(shiny)
 library(bslib)
+library(ggplot2)
+library(plotly)
+library(dplyr)
 
 # Define UI for application
 ui <- page_navbar(
@@ -16,11 +19,20 @@ ui <- page_navbar(
            )
         ),
         tabPanel("Question 1", value = "q1",
-          fluidPage(h3("Question 1")),
-          mainPanel(
-            # Output
-            uiOutput("output")
-          )
+         fluidPage(
+           titlePanel("Risk Factors and Lung Cancer Visualization"),
+           sidebarLayout(
+             sidebarPanel(
+               selectInput("xaxis", "Choose a variable for the X-axis:", 
+                           choices = c("Smoking", "Air.Pollution", "Alcohol.use", "Obesity", "Genetic.Risk")),
+               selectInput("color", "Choose a variable for color coding:",
+                           choices = c("Age", "Gender", "Smoking", "Air.Pollution", "Alcohol.use", "Obesity", "Genetic.Risk"))
+             ),
+             mainPanel(
+               plotlyOutput("plot")
+             )
+           )
+         )
         ),
         tabPanel("Question 2", value = "q2",
          fluidPage(h3("Question 2")),
@@ -55,12 +67,22 @@ server <- function(input, output) {
       )
     } else if (selected_tab == "q1") {
       # Render output for Question 1
-      fluidRow(
-        column(12,
-               h3("Answer to Question 1"),
-               # Add your output elements for Question 1 here
-        )
-      )
+      cancer_data <- read.csv("cancer patient data sets.csv")
+      cancer_data <- cancer_data %>%
+        mutate(across(c(Smoking, Air.Pollution, Alcohol.use, Obesity, Genetic.Risk, Age, Gender), as.factor))
+      output$plot <- renderPlotly({
+        if (input$xaxis != input$color) {
+          gg <- ggplot(cancer_data, aes_string(x = input$xaxis, fill = input$color, group = input$color)) +
+            geom_bar(stat = "count", position = position_dodge()) +
+            labs(x = input$xaxis, fill = input$color) +
+            theme_minimal()
+          ggplotly(gg)
+        } else {
+          gg <- ggplot() +
+            labs(title = "Please select different variables for X-axis and color.")
+          ggplotly(gg)
+        }
+      })
     } else if (selected_tab == "q2") {
       # Render output for Question 2
       fluidRow(
