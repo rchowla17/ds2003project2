@@ -27,8 +27,7 @@ ui <- page_navbar(
   underline=T,
       # Tab selection
 
-        tabPanel("Introduction",
-           value = "intro",
+        tabPanel("Introduction", value = "intro",
            fluidPage(h3("Introduction to Dataset and Analysis")),
            p("This is a comprehensive data set comprised of lung cancer patients and their associated risk factors."),
            a("Kaggle data set link",
@@ -43,8 +42,18 @@ ui <- page_navbar(
             p("Each entry in the data set is classified by a unique 'Patient ID' which is followed by demographic information like 'Gender' and 'Age'. The rest of the data set is comprised of variables known as risk factors, which are associated with an increased liklihood of developing lung cancer."),
              selectInput("variable_selector", "Select a Risk Factor:",
                          choices = c( "Smoking", "Obesity", "Air Pollution", "Alcohol Use", "OccuPational Hazards", "Genetic Risk", "Passive Smoker", "Clubbing of Finger Nails", "Wheezing", "Balanced Diet" )),
-             verbatimTextOutput("variable_details")
+             verbatimTextOutput("variable_details"),
+             tags$hr(),
+             h4("Research Questions and Data Analysis"),
+             p("Lung Cancer is one of the most prevalent and deadly types of cancer. For a long time, it was believed that smoking was the leading contributor to lung cancer; however, new studies have identified other risk factors that increase the likelihood of cancer. Through analysis of this dataset, we hope to identify these risk factors and find key correlations. Below are our targeted research questions: "),
+             tags$ul(
+               tags$li("Are there any interactions between variables that are most likely to result in a patient contracting lung cancer/which behaviors are most preventative?"),
+               tags$li("Which age group with high level lung cancer is most affected by dry cough and clubbing of finger nails?"),
+               tags$li("What symptoms are most present with different levels of lung cancer?")
+             )
+
            ),
+      
          
         
         tabPanel("Question 1", value = "q1",
