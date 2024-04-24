@@ -29,10 +29,7 @@ ui <- page_navbar(
 
         tabPanel("Introduction", value = "intro",
            fluidPage(h3("Introduction to Dataset and Analysis")),
-            div(
-        style = "position:relative; height:120px;",  # Ensure there is room for the header
-        img(src = "dataset-cover.jpeg", style = "position:absolute; right:10px; top:10px; width:100px;")  # Adjust width as needed
-      ),
+        
            p("This is a comprehensive data set comprised of lung cancer patients and their associated risk factors."),
            a("Kaggle data set link",
               href = "https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link",
@@ -55,7 +52,11 @@ ui <- page_navbar(
                tags$li("Are there any interactions between variables that are most likely to result in a patient contracting lung cancer/which behaviors are most preventative?"),
                tags$li("Which age group with high level lung cancer is most affected by dry cough and clubbing of finger nails?"),
                tags$li("What symptoms are most present with different levels of lung cancer?")
-             )
+             ),
+                div(style = "display: flex; justify-content: flex-end; align-items: center;",
+      tags$img(src = "dataset-cover.jpeg", style = "width: 300px; margin-right: 30px;"),  # First image
+      tags$img(src = "facts-mortality-world.jpg", style = "width: 500px;")  # Second image
+    )
 
            ),
       
