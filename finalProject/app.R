@@ -40,6 +40,7 @@ ui <- page_navbar(
             ),
             tags$hr(),
             p("Each entry in the data set is classified by a unique 'Patient ID' which is followed by demographic information like 'Gender' and 'Age'. The rest of the data set is comprised of variables known as risk factors, which are associated with an increased liklihood of developing lung cancer."),
+            p("Risk factor variables are scored on a scale of 1-8 with 8 repersenting the highest severity."),
              selectInput("variable_selector", "Select a Risk Factor:",
                          choices = c( "Smoking", "Obesity", "Air Pollution", "Alcohol Use", "OccuPational Hazards", "Genetic Risk", "Passive Smoker", "Clubbing of Finger Nails", "Wheezing", "Balanced Diet" )),
              verbatimTextOutput("variable_details"),
