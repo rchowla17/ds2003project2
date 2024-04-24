@@ -29,6 +29,10 @@ ui <- page_navbar(
 
         tabPanel("Introduction", value = "intro",
            fluidPage(h3("Introduction to Dataset and Analysis")),
+            div(
+        style = "position:relative; height:120px;",  # Ensure there is room for the header
+        img(src = "dataset-cover.jpeg", style = "position:absolute; right:10px; top:10px; width:100px;")  # Adjust width as needed
+      ),
            p("This is a comprehensive data set comprised of lung cancer patients and their associated risk factors."),
            a("Kaggle data set link",
               href = "https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link",
