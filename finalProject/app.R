@@ -95,9 +95,30 @@ ui <- page_navbar(
         tabPanel("Question 3", value = "q3",
          fluidPage(h3("Question 3")),
          mainPanel()
+        ), 
+        tabPanel("Results", value = 'results',
+           fluidPage(
+             titlePanel("Results and Takeaways"),
+             br(), br(), br(),
+             fluidRow(
+               column(4,
+                      h3("Question 1: "), p("Are there any interactions between variables that are most likely to result in a patient contracting lung cancer?")   
+               ),
+               column(4,
+                      h3("Question 2: "), p(" Which age group with high level lung cancer is most affected by dry cough and clubbing of finger nails?")    
+               ),
+               column(4,
+                      h3("Question 3:  "), p(""),    
+               )
+             ) ,
+             fluidRow(
+               column(4, h4("Takeaway: ")),
+               column(4, h4("Takeaway: ")),
+               column(4, h4("Takeaway: "))
+             )
+           ) 
         )
-    # Main panel for displaying outputs
-)
+  )
 
 # Define server logic
 server <- function(input, output) {
