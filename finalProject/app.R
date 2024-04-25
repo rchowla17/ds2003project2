@@ -113,8 +113,8 @@ ui <- page_navbar(
              ) ,
              fluidRow(
                column(4, h4("Takeaway: ")),
+               column(4, h4("Takeaway: "), p("There is seemingly no correlation between age groups with dry cough and clubbing of fingernails of those with high level lung cancer. There is very little data for the selected patients above age 45, likely because of the fatality of high level lung cancer.")),
                column(4, h4("Takeaway: ")),
-               column(4, h4("Takeaway: "))
              )
            ) 
         )
