@@ -25,78 +25,78 @@ ui <- page_navbar(
     
   ),
   underline=T,
-      # Tab selection
-
-        tabPanel("Introduction", value = "intro",
+  # Tab selection
+  
+  tabPanel("Introduction", value = "intro",
            fluidPage(h3("Introduction to Dataset and Analysis")),
-        
+           
            p("This is a comprehensive data set comprised of lung cancer patients and their associated risk factors."),
            a("Kaggle data set link",
-              href = "https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link",
-              target = "_blank",
-              tags$head(tags$style(HTML("
+             href = "https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link",
+             target = "_blank",
+             tags$head(tags$style(HTML("
                a { color: #007bff; } /* blue */
                a:hover { color: #ffa700; } /* orange */
              ")))
-            ),
-            tags$hr(),
-            p("Each entry in the data set is classified by a unique 'Patient ID' which is followed by demographic information like 'Gender' and 'Age'. The rest of the data set is comprised of variables known as risk factors, which are associated with an increased liklihood of developing lung cancer."),
-            p("Risk factor variables are scored on a scale of 1-8 with 8 repersenting the highest severity."),
-             selectInput("variable_selector", "Select a Risk Factor:",
-                         choices = c( "Smoking", "Obesity", "Air Pollution", "Alcohol Use", "OccuPational Hazards", "Genetic Risk", "Passive Smoker", "Clubbing of Finger Nails", "Wheezing", "Balanced Diet" )),
-             verbatimTextOutput("variable_details"),
-             tags$hr(),
-             h4("Research Questions and Data Analysis"),
-             p("Lung Cancer is one of the most prevalent and deadly types of cancer. For a long time, it was believed that smoking was the leading contributor to lung cancer; however, new studies have identified other risk factors that increase the likelihood of cancer. Through analysis of this dataset, we hope to identify these risk factors and find key correlations. Below are our targeted research questions: "),
-             tags$ul(
-               tags$li("Are there any interactions between variables that are most likely to result in a patient contracting lung cancer/which behaviors are most preventative?"),
-               tags$li("Which age group with high level lung cancer is most affected by dry cough and clubbing of finger nails?"),
-               tags$li("What symptoms are most present with different levels of lung cancer?")
-             ),
-                div(style = "display: flex; justify-content: flex-end; align-items: center;",
-      tags$img(src = "dataset-cover.jpeg", style = "width: 300px; margin-right: 30px;"),  # First image
-      tags$img(src = "facts-mortality-world.jpg", style = "width: 500px;")  # Second image
-    )
-
            ),
-      
-         
-        
-        tabPanel("Question 1", value = "q1",
-         fluidPage(
-           titlePanel("Risk Factors and Lung Cancer Visualization"),
-           sidebarLayout(
-             sidebarPanel(
-               selectInput("xaxis", "Choose a variable for the X-axis:", 
-                           choices = c("Smoking", "Air.Pollution", "Alcohol.use", "Obesity", "Genetic.Risk")),
-               selectInput("color", "Choose a variable for color coding:",
-                           choices = c("Age", "Gender", "Smoking", "Air.Pollution", "Alcohol.use", "Obesity", "Genetic.Risk"))
-             ),
-             mainPanel(
-               plotlyOutput("plot1")
+           tags$hr(),
+           p("Each entry in the data set is classified by a unique 'Patient ID' which is followed by demographic information like 'Gender' and 'Age'. The rest of the data set is comprised of variables known as risk factors, which are associated with an increased liklihood of developing lung cancer."),
+           p("Risk factor variables are scored on a scale of 1-8 with 8 repersenting the highest severity."),
+           selectInput("variable_selector", "Select a Risk Factor:",
+                       choices = c( "Smoking", "Obesity", "Air Pollution", "Alcohol Use", "OccuPational Hazards", "Genetic Risk", "Passive Smoker", "Clubbing of Finger Nails", "Wheezing", "Balanced Diet" )),
+           verbatimTextOutput("variable_details"),
+           tags$hr(),
+           h4("Research Questions and Data Analysis"),
+           p("Lung Cancer is one of the most prevalent and deadly types of cancer. For a long time, it was believed that smoking was the leading contributor to lung cancer; however, new studies have identified other risk factors that increase the likelihood of cancer. Through analysis of this dataset, we hope to identify these risk factors and find key correlations. Below are our targeted research questions: "),
+           tags$ul(
+             tags$li("Are there any interactions between variables that are most likely to result in a patient contracting lung cancer?"),
+             tags$li("Which age group with high level lung cancer is most affected by dry cough and clubbing of finger nails?"),
+             tags$li("What symptoms are most present with different levels of lung cancer?")
+           ),
+           div(style = "display: flex; justify-content: flex-end; align-items: center;",
+               tags$img(src = "dataset-cover.jpeg", style = "width: 300px; margin-right: 30px;"),  # First image
+               tags$img(src = "facts-mortality-world.jpg", style = "width: 500px;")  # Second image
+           )
+           
+  ),
+  
+  
+  
+  tabPanel("Question 1", value = "q1",
+           fluidPage(
+             titlePanel("Risk Factors and Lung Cancer Visualization"),
+             sidebarLayout(
+               sidebarPanel(
+                 selectInput("xaxis", "Choose a variable for the X-axis:", 
+                             choices = c("Smoking", "Air.Pollution", "Alcohol.use", "Obesity", "Genetic.Risk")),
+                 selectInput("color", "Choose a variable for color coding:",
+                             choices = c("Genetic.Risk", "Gender", "Smoking", "Air.Pollution", "Alcohol.use", "Obesity", "Age"))
+               ),
+               mainPanel(
+                 plotlyOutput("plot1")
+               )
              )
            )
-         )
-        ),
-        tabPanel("Question 2", value = "q2",
-         fluidPage(
-           titlePanel("Analysis of High Level Lung Cancer Symptoms"),
-           sidebarLayout(
-             sidebarPanel(
-               sliderInput("age_range", "Choose Age Range:",
-                           min = minimum_age, max = 65, value = c(minimum_age, maximum_age), step = 1)
-             ),
-             mainPanel(
-               plotlyOutput("plot2")
+  ),
+  tabPanel("Question 2", value = "q2",
+           fluidPage(
+             titlePanel("Analysis of High Level Lung Cancer Symptoms"),
+             sidebarLayout(
+               sidebarPanel(
+                 sliderInput("age_range", "Choose Age Range:",
+                             min = minimum_age, max = 65, value = c(minimum_age, maximum_age), step = 1)
+               ),
+               mainPanel(
+                 plotlyOutput("plot2")
+               )
              )
            )
-         )
-        ),
-        tabPanel("Question 3", value = "q3",
-         fluidPage(h3("Question 3")),
-         mainPanel()
-        ), 
-        tabPanel("Results", value = 'results',
+  ),
+  tabPanel("Question 3", value = "q3",
+           fluidPage(h3("Question 3")),
+           mainPanel()
+  ), 
+  tabPanel("Results", value = 'results',
            fluidPage(
              titlePanel("Results and Takeaways"),
              br(), br(), br(),
@@ -112,17 +112,17 @@ ui <- page_navbar(
                )
              ) ,
              fluidRow(
-               column(4, h4("Takeaway: ")),
+               column(4, h4("Takeaway: "), p("Lung cancer risk isn't solely contingent on the factors provided, like smoking or genetics alone, but is influenced by a many interconnected elements. However, we can identify the trend that those with higher levels of risk typically are at a greater risk of developing lung cancer. ")),
                column(4, h4("Takeaway: "), p("There is seemingly no correlation between age groups with dry cough and clubbing of fingernails of those with high level lung cancer. There is very little data for the selected patients above age 45, likely because of the fatality of high level lung cancer.")),
                column(4, h4("Takeaway: ")),
              )
            ) 
-        )
   )
+)
 
 # Define server logic
 server <- function(input, output) {
-
+  
   cancer_data <- df
   cancer_data <- cancer_data %>%
     mutate(across(c(Smoking, Air.Pollution, Alcohol.use, Obesity, Genetic.Risk, Age, Gender), as.factor))
@@ -149,7 +149,7 @@ server <- function(input, output) {
     else if (input$variable_selector == "OccuPational Hazards") {
       return("Occupational Hazards: The patient's exposure to occupational hazards. (Categorical, Mean ± SD: 4.15 ± 2.44)")
     }
-     else if (input$variable_selector == "Air Pollution") {
+    else if (input$variable_selector == "Air Pollution") {
       return("Air Pollution: The level of air pollution exposure of the patient. (Categorical, Mean ± S):  3.84 ± 2.30)")
     }else if (input$variable_selector == "Air Pollution") {
       return("Air Pollution: The level of air pollution exposure of the patient. (Categorical, Mean ± SD: 3.84 ± 2.30)")
