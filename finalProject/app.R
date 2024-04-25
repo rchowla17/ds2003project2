@@ -25,16 +25,16 @@ ui <- page_navbar(
     
   ),
   underline=T,
-      # Tab selection
-
-        tabPanel("Introduction", value = "intro",
+  # Tab selection
+  
+  tabPanel("Introduction", value = "intro",
            fluidPage(h3("Introduction to Dataset and Analysis")),
-        
+           
            p("This is a comprehensive data set comprised of lung cancer patients and their associated risk factors."),
            a("Kaggle data set link",
-              href = "https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link",
-              target = "_blank",
-              tags$head(tags$style(HTML("
+             href = "https://www.kaggle.com/datasets/thedevastator/cancer-patients-and-air-pollution-a-new-link",
+             target = "_blank",
+             tags$head(tags$style(HTML("
                a { color: #007bff; } /* blue */
                a:hover { color: #ffa700; } /* orange */
              ")))
@@ -128,17 +128,17 @@ ui <- page_navbar(
                )
              ) ,
              fluidRow(
-               column(4, h4("Takeaway: ")),
+               column(4, h4("Takeaway: "), p("Lung cancer risk isn't solely contingent on the factors provided, like smoking or genetics alone, but is influenced by a many interconnected elements. However, we can identify the trend that those with higher levels of risk typically are at a greater risk of developing lung cancer. ")),
                column(4, h4("Takeaway: "), p("There is seemingly no correlation between age groups with dry cough and clubbing of fingernails of those with high level lung cancer. There is very little data for the selected patients above age 45, likely because of the fatality of high level lung cancer.")),
                column(4, h4("Takeaway:"), p("The majority of patients with high level lung cancer rated most of their symptoms lower while patients with low level lung cancer had overall a higher magnitude of their symptoms. This could be due to the fact that patients with a higher level of cancer may be more use to those symptoms."))
              )
            ) 
-        )
   )
+)
 
 # Define server logic
 server <- function(input, output) {
-
+  
   cancer_data <- df
   cancer_data <- cancer_data %>%
     mutate(across(c(Smoking, Air.Pollution, Alcohol.use, Obesity, Genetic.Risk, Age, Gender), as.factor))
@@ -165,7 +165,7 @@ server <- function(input, output) {
     else if (input$variable_selector == "OccuPational Hazards") {
       return("Occupational Hazards: The patient's exposure to occupational hazards. (Categorical, Mean ± SD: 4.15 ± 2.44)")
     }
-     else if (input$variable_selector == "Air Pollution") {
+    else if (input$variable_selector == "Air Pollution") {
       return("Air Pollution: The level of air pollution exposure of the patient. (Categorical, Mean ± S):  3.84 ± 2.30)")
     }else if (input$variable_selector == "Air Pollution") {
       return("Air Pollution: The level of air pollution exposure of the patient. (Categorical, Mean ± SD: 3.84 ± 2.30)")
