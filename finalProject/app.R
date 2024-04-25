@@ -51,7 +51,7 @@ ui <- page_navbar(
              tags$ul(
                tags$li("Are there any interactions between variables that are most likely to result in a patient contracting lung cancer/which behaviors are most preventative?"),
                tags$li("Which age group with high level lung cancer is most affected by dry cough and clubbing of finger nails?"),
-               tags$li("What symptoms are most present with different levels of lung cancer?")
+               tags$li("How does the severity of symptoms relate to different levels of lung cancer?")
              ),
                 div(style = "display: flex; justify-content: flex-end; align-items: center;",
       tags$img(src = "dataset-cover.jpeg", style = "width: 300px; margin-right: 30px;"),  # First image
@@ -93,8 +93,24 @@ ui <- page_navbar(
          )
         ),
         tabPanel("Question 3", value = "q3",
-         fluidPage(h3("Question 3")),
-         mainPanel()
+         fluidPage(
+           titlePanel("Comparing Specific Symptoms to Levels of Lung Cancer"),
+            sidebarLayout(
+              sidebarPanel(
+                selectInput("symptom", "Select Symptom:",
+                                   choices = c("Chest Pain", "Fatigue", "Shortness of Breath", "Wheezing", 
+                                               "Frequent Cold", "Dry Cough"),
+                                   selected = "Chest Pain"),
+                       
+                       uiOutput("slider")
+                     ),
+                     
+                     mainPanel(
+                       plotlyOutput("graph3"),
+                       textOutput("caption3")
+                     )
+              )
+           )
         ), 
         tabPanel("Results", value = 'results',
            fluidPage(
@@ -108,13 +124,13 @@ ui <- page_navbar(
                       h3("Question 2: "), p(" Which age group with high level lung cancer is most affected by dry cough and clubbing of finger nails?")    
                ),
                column(4,
-                      h3("Question 3:  "), p(""),    
+                      h3("Question 3:  "), p("How does the severity of symptoms relate to different levels of lung cancer?"),    
                )
              ) ,
              fluidRow(
                column(4, h4("Takeaway: ")),
                column(4, h4("Takeaway: "), p("There is seemingly no correlation between age groups with dry cough and clubbing of fingernails of those with high level lung cancer. There is very little data for the selected patients above age 45, likely because of the fatality of high level lung cancer.")),
-               column(4, h4("Takeaway: ")),
+               column(4, h4("Takeaway:"), p("The majority of patients with high level lung cancer rated most of their symptoms lower while patients with low level lung cancer had overall a higher magnitude of their symptoms. This could be due to the fact that patients with a higher level of cancer may be more use to those symptoms."))
              )
            ) 
         )
@@ -184,6 +200,63 @@ server <- function(input, output) {
     
     ggplotly(p, tooltip = "text")
   })
+  
+  mini_dataset <- df %>%
+    select(Age, Gender, Chest.Pain, Fatigue, Shortness.of.Breath, Wheezing, Frequent.Cold, Dry.Cough, Level)
+  
+  categories <- c('Low', 'Medium', 'High')
+  counts <- reactive({
+    filtered_data <- switch(input$symptom,
+                            "Chest Pain" = mini_dataset %>% filter(Chest.Pain == input$chestpain),
+                            "Fatigue" = mini_dataset %>% filter(Fatigue == input$fatigue),
+                            "Shortness of Breath" = mini_dataset %>% filter(Shortness.of.Breath == input$shortbreath),
+                            "Wheezing" = mini_dataset %>% filter(Wheezing == input$wheeze),
+                            "Frequent Cold" = mini_dataset %>% filter(Frequent.Cold == input$frequentcold),
+                            "Dry Cough" = mini_dataset %>% filter(Dry.Cough == input$drycough))
+    
+    
+    counts <- filtered_data %>%
+      group_by(Level) %>%
+      summarise(count = n())
+    
+    counts <- merge(data.frame(Level = categories), counts, by = "Level", all.x = TRUE)
+    
+    counts$count[is.na(counts$count)] <- 0
+    
+    counts$count
+  })
+  
+  output$caption3 <- renderText("This graph shows the number of patients that exhibited symptoms of that magnitude grouped in their respective levels of Lung Cancer compared to the total number of patients with that level of Lung Cancer")
+  
+  output$graph3 <- renderPlotly({
+    graph <- plot_ly(x = categories, y = counts(), type = "bar") %>%
+      layout(
+        yaxis = list(range = c(0, 400), tickmode = "linear", tick0 = 0, dtick = 40),
+        xaxis = list(categoryorder = "array", categoryarray = c("Low", "Medium", "High")),
+        annotations = list(
+          list(x = categories[1], y = 303, text = paste("Out of ", 303), showarrow = FALSE),
+          list(x = categories[2], y = 332, text = paste("Out of ", 332), showarrow = FALSE),
+          list(x = categories[3], y = 365, text = paste("Out of ", 365), showarrow = FALSE)
+        ))
+  })
+  
+  output$slider <- renderUI({
+    slider <- switch(input$symptom,
+                     "Chest Pain" = sliderInput("chestpain", label = "Chest Pain",
+                                                min = 1, max = 9, value = 4, step = 1),
+                     "Fatigue" = sliderInput("fatigue", label = "Fatigue",
+                                             min = 1, max = 9, value = 4, step = 1),
+                     "Shortness of Breath" = sliderInput("shortbreath", label = "Shortness of Breath",
+                                                         min = 1, max = 9, value = 4, step = 1),
+                     "Wheezing" = sliderInput("wheeze", label = "Wheezing",
+                                              min = 1, max = 8, value = 4, step = 1), 
+                     "Frequent Cold" = sliderInput("frequentcold", label = "Frequent Cold",
+                                                   min = 1, max = 9, value = 4, step = 1),
+                     "Dry Cough" =  sliderInput("drycough", label = "Dry Cough",
+                                                min = 1, max = 7, value = 4), step = 1)
+  })
+  
+  
 }
 
 # Run the application
